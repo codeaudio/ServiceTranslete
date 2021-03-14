@@ -19,23 +19,22 @@ class Base(Record):
     def __init__(self, url):
         self.url = url
 
-    def get_info(self, response):
-        try:
-            response = [response.headers, response.url, response.elapsed, response.encoding]
-            self.info_records.append(response)
-        except AttributeError:
-            lang, response = response
-            response = [response.headers, response.url, response.elapsed, response.encoding]
-            return response
+    def setLang(self, lang):
+        self.lang = lang
+        return self
+
+    def setText(self, text):
+        self.text = text
+        return self
 
 
 class GetTranslate(Base):
 
-    def post(self, lang, text):
-        print(lang)
-        querystring = {"to": f"{lang.strip()}", "api-version": "3.0", "profanityAction": "NoAction",
+    def post(self):
+
+        querystring = {"to": f"{self.lang.strip()}", "api-version": "3.0", "profanityAction": "NoAction",
                        "textType": "plain"}
-        payload = ("[{\"Text\":\"" + text + "\"}]").encode('utf-8')
+        payload = ("[{\"Text\":\"" + self.text + "\"}]").encode('utf-8')
         headers = {
             'content-type': "application/json",
             'x-rapidapi-key': "4d559d2b2emsh1a8eef160e6bf8ep11ce26jsne29bc7830287",
@@ -43,7 +42,7 @@ class GetTranslate(Base):
         }
         response = requests.post(url=self.url, data=payload, headers=headers, params=querystring)
         self.get_info(response)
-        return response, text, lang
+        return response, self.text, self.lang
 
     def get_translate(self, post):
         resp, text, lang = post
@@ -72,12 +71,20 @@ class GetTranslate(Base):
         seconds = round(seconds, 2)
         return f"Запросы заняли {seconds} секунд"
 
+    def get_info(self, response):
 
-"""translate = GetTranslate(url=url_translator)
-result = translate.get_translate(translate.post('ar', 'привет'))
-result2 = translate.get_translate(translate.post('ja', 'привет'))
-print(translate.get_info(result2))
-res = translate.get_all_time()
-print('\n'.join(Record.records[2]))
-print(res)
-print(translate.get_sum_time())"""
+        try:
+            response = [response.headers, response.url, response.elapsed, response.encoding]
+            self.info_records.append(response)
+        except AttributeError:
+            r1, r2 = response
+            return r1
+
+
+translate = GetTranslate(url=url_translator)
+result = translate.setLang('ru').setText('d').post()
+
+r = translate.get_translate(result)
+
+r2 = translate.get_info(r)
+print(r2)
