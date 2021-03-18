@@ -15,7 +15,31 @@ class Record:
         self.info_records.append(record)
 
 
-class Base(Record):
+class Info(Record):
+    def get_all_time(self):
+        time_row = []
+        for row in self.info_records:
+            row = round(row[2].total_seconds(), 3)
+            time_row.append(row)
+        return time_row
+
+    def get_sum_time(self):
+        seconds = 0
+        for time in self.get_all_time():
+            seconds += time
+        seconds = round(seconds, 2)
+        return f"Запросы заняли {seconds} секунд"
+
+    def get_info(self, response):
+        try:
+            response = [response.headers, response.url, response.elapsed, response.encoding]
+            self.info_records.append(response)
+        except AttributeError:
+            r1, r2 = response
+            return f"{r1}"
+
+
+class Base(Info):
     def __init__(self, url):
         self.url = url
 
@@ -57,34 +81,12 @@ class GetTranslate(Base):
         self.add_record(translate_result[0].split('\n'))
         return translate_result
 
-    def get_all_time(self):
-        time_row = []
-        for row in self.info_records:
-            row = round(row[2].total_seconds(), 3)
-            time_row.append(row)
-        return time_row
-
-    def get_sum_time(self):
-        seconds = 0
-        for time in self.get_all_time():
-            seconds += time
-        seconds = round(seconds, 2)
-        return f"Запросы заняли {seconds} секунд"
-
-    def get_info(self, response):
-
-        try:
-            response = [response.headers, response.url, response.elapsed, response.encoding]
-            self.info_records.append(response)
-        except AttributeError:
-            r1, r2 = response
-            return r1
-
 
 translate = GetTranslate(url=url_translator)
 result = translate.setLang('ru').setText('d').post()
-
+re = translate.setLang('ru').setText('d').post()
 r = translate.get_translate(result)
+info = translate.get_info(r)
+print(info)
 
-r2 = translate.get_info(r)
-print(r2)
+
