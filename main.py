@@ -87,5 +87,3 @@ re = translate.setLang('ru').setText('d').post()
 r = translate.get_translate(result)
 info = translate.get_info(r)
 print(info)
-
-
