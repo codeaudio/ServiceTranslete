@@ -54,7 +54,6 @@ class Base(Info):
 
 class GetTranslate(Base):
     def post(self):
-
         querystring = {"to": f"{self.lang.strip()}", "api-version": "3.0", "profanityAction": "NoAction",
                        "textType": "plain"}
         payload = ("[{\"Text\":\"" + self.text + "\"}]").encode('utf-8')
