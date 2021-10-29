@@ -39,7 +39,7 @@ class Info(Record):
             return f"{r1}"
 
 
-class Base(Info):
+class Base:
     def __init__(self, url):
         self.url = url
 
@@ -52,7 +52,7 @@ class Base(Info):
         return self
 
 
-class GetTranslate(Base):
+class GetTranslate(Base, Record):
     def post(self):
         querystring = {"to": f"{self.lang.strip()}", "api-version": "3.0", "profanityAction": "NoAction",
                        "textType": "plain"}
