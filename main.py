@@ -74,8 +74,9 @@ class GetTranslate(Base):
             translate_result = (f"Ваш текст: {text}\nПеревод: {text_translate}\n"
                                 f"Язык: {lang}\nВремя: {now}", resp)
         except KeyError:
+            """тут должно быть логирование"""
             print(f"Ключ '{lang}' языка не найден")
-            return exit(1)
+            return
         self.add_record(translate_result[0].split('\n'))
         return translate_result
 
