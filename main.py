@@ -80,10 +80,10 @@ class GetTranslate(Base, Record):
         self.add_record(translate_result[0].split('\n'))
         return translate_result
 
-
-translate = GetTranslate(url=url_translator)
-result = translate.setLang('ru').setText('d').post()
-re = translate.setLang('ru').setText('d').post()
-r = translate.get_translate(result)
-info = translate.get_info(r)
-print(info)
+if __name__ == '__main__':
+    translate = GetTranslate(url=url_translator)
+    result = translate.setLang('ru').setText('d').post()
+    re = translate.setLang('ru').setText('d').post()
+    r = translate.get_translate(result)
+    info = translate.get_info(r)
+    print(info)
