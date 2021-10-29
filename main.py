@@ -52,7 +52,7 @@ class Base:
         return self
 
 
-class GetTranslate(Base, Record):
+class GetTranslate(Base, Info):
     def post(self):
         querystring = {"to": f"{self.lang.strip()}", "api-version": "3.0", "profanityAction": "NoAction",
                        "textType": "plain"}
@@ -80,10 +80,9 @@ class GetTranslate(Base, Record):
         self.add_record(translate_result[0].split('\n'))
         return translate_result
 
+
 if __name__ == '__main__':
     translate = GetTranslate(url=url_translator)
-    result = translate.setLang('ru').setText('d').post()
-    re = translate.setLang('ru').setText('d').post()
-    r = translate.get_translate(result)
-    info = translate.get_info(r)
+    result = translate.setLang('ru').setText('Hello').post()
+    info = translate.get_info(translate.get_translate(result))
     print(info)
